@@ -58,6 +58,8 @@ fi
 
 source ~/.bashrc
 
+mkdir -p "$GEM_HOME"
+
 bundle install
 
 # Write sensible values into the config file:
