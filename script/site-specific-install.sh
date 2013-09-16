@@ -39,4 +39,6 @@ update_mysociety_apt_sources
 
 install_website_packages
 
+add_website_to_nginx
+
 notice_msg "FIXME: complete this script..."
