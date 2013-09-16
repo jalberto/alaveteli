@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Set this to the version we want to check out - for developing the
+# script, make this the remote-tracking branch corresponding to the
+# dev branch:
+VERSION=origin/install-script
+
 PARENT_SCRIPT_URL=https://github.com/mysociety/commonlib/blob/master/bin/install-site.sh
 
 misuse() {
