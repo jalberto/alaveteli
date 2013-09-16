@@ -27,18 +27,29 @@ misuse() {
 [ -z "$HOST" ] && misuse HOST
 [ -z "$DISTRIBUTION" ] && misuse DISTRIBUTION
 [ -z "$VERSION" ] && misuse VERSION
-
-install_nginx
-
-# XXX FIXME: decide on Exim vs Postfix
-
-# Check out the current released version
-su -l -c "cd '$REPOSITORY' && git checkout '$VERSION'" "$UNIX_USER"
+[ -z "$DEVELOPMENT_INSTALL" ] && misuse DEVELOPMENT_INSTALL
+[ -z "$BIN_DIRECTORY" ] && misuse BIN_DIRECTORY
 
 update_mysociety_apt_sources
 
+# XXX FIXME: decide on Exim vs Postfix
+
+if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
+    install_nginx
+    add_website_to_nginx
+    # Check out the current released version
+    su -l -c "cd '$REPOSITORY' && git checkout '$VERSION'" "$UNIX_USER"
+fi
+
 install_website_packages
 
-add_website_to_nginx
+add_postgresql_user
+
+export DEVELOPMENT_INSTALL
+su -c "$BIN_DIRECTORY/install-as-user '$UNIX_USER' '$HOST' '$DIRECTORY'" "$UNIX_USER"
+
+if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
+    install_sysvinit_script
+fi
 
 notice_msg "FIXME: complete this script..."
