@@ -28,4 +28,13 @@ misuse() {
 [ -z "$DISTRIBUTION" ] && misuse DISTRIBUTION
 [ -z "$VERSION" ] && misuse VERSION
 
+install_nginx
+
+# XXX FIXME: decide on Exim vs Postfix
+
+# Check out the current released version
+su -l -c "cd '$REPOSITORY' && git checkout '$VERSION'" "$UNIX_USER"
+
+install_website_packages
+
 notice_msg "FIXME: complete this script..."
