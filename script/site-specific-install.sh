@@ -35,6 +35,8 @@ install_nginx
 # Check out the current released version
 su -l -c "cd '$REPOSITORY' && git checkout '$VERSION'" "$UNIX_USER"
 
+update_mysociety_apt_sources
+
 install_website_packages
 
 notice_msg "FIXME: complete this script..."
