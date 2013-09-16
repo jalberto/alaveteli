@@ -56,7 +56,7 @@ export PATH="\$GEM_HOME/bin:\$PATH"
 EOBRC
 fi
 
-source $HOME/.bashrc
+. $HOME/.bashrc
 
 bundle install
 
