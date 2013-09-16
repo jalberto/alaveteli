@@ -56,6 +56,8 @@ export PATH="\$GEM_HOME/bin:\$PATH"
 EOBRC
 fi
 
+source $HOME/.bashrc
+
 bundle install
 
 # Write sensible values into the config file:
