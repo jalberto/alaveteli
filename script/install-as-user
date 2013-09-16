@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 set -x
@@ -56,7 +56,10 @@ export PATH="\$GEM_HOME/bin:\$PATH"
 EOBRC
 fi
 
-source ~/.bashrc
+# We also need to set these variable for this script (running under dash):
+export GEM_HOME="$HOME/gems"
+export GEM_PATH=
+export PATH="$GEM_HOME/bin:$PATH"
 
 mkdir -p "$GEM_HOME"
 
