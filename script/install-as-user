@@ -44,27 +44,19 @@ LINK_DESTINATION="$HOME/alaveteli"
 ln -sfn "$REPOSITORY" $LINK_DESTINATION
 cd "$REPOSITORY"
 
+BASHRC_GEM_COMMENT="Set up local gem directory for Alaveteli"
+
+if ! grep -q "$BASHRC_GEM_COMMENT" $HOME/.bashrc; then
+    cat >>$HOME/.bashrc <<EOBRC
+
+# $BASHRC_GEM_COMMENT
+export GEM_HOME="$DIRECTORY/gems"
+export GEM_PATH=
+export PATH="\$GEM_HOME/bin:\$PATH"
+EOBRC
+fi
 
 bundle install
-
-
-# # Install the compass gem locally - it's required for generating the
-# # CSS:
-#
-# export GEM_HOME="$DIRECTORY/gems"
-# mkdir -p "$GEM_HOME"
-# export GEM_PATH=
-# export PATH="$GEM_HOME/bin:$PATH"
-#
-# gem install --no-ri --no-rdoc compass
-
-# Use compass to generate the CSS, if it doesn't seem to already
-# exist:
-
-# if [ ! -f web/cobrands/default/base.css ]
-# then
-#     bin/make_css
-# fi
 
 # Write sensible values into the config file:
 
