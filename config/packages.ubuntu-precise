@@ -25,7 +25,7 @@ libxslt1-dev
 uuid-dev
 ruby1.9.1-dev
 rubygems
-rake (>= 0.9.2.2)
+rake
 build-essential
 ruby-bundler
 sqlite3
