@@ -50,7 +50,7 @@ if ! grep -q "$BASHRC_GEM_COMMENT" $HOME/.bashrc; then
     cat >>$HOME/.bashrc <<EOBRC
 
 # $BASHRC_GEM_COMMENT
-export GEM_HOME="$DIRECTORY/gems"
+export GEM_HOME="$HOME/gems"
 export GEM_PATH=
 export PATH="\$GEM_HOME/bin:\$PATH"
 EOBRC
