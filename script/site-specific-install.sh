@@ -41,6 +41,8 @@ if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
     su -l -c "cd '$REPOSITORY' && git checkout '$VERSION'" "$UNIX_USER"
 fi
 
+install_postfix
+
 install_website_packages
 
 add_postgresql_user
