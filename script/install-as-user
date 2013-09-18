@@ -74,23 +74,59 @@ mv "$TMP_BASHRC" "$BASHRC"
 
 source "$BASHRC"
 
-bundle install
-
 # Write sensible values into the config file:
 
-# sed -r \
-#     -e "s,^( *MAPIT_DB_NAME:).*,\\1 '$DB_NAME'," \
-#     -e "s,^( *MAPIT_DB_USER:).*,\\1 '$UNIX_USER'," \
-#     -e "s,^( *COUNTRY:).*,\\1 ''," \
-#     -e "s,^( *AREA_SRID:).*,\\1 4326," \
-#     -e "s,^( *DJANGO_SECRET_KEY:).*,\\1 '$RANDOM_STRING'," \
-#     conf/general.yml-example > conf/general.yml
+function random_alphanumerics() {
+    < /dev/urandom tr -dc A-Za-z0-9 | head -c$1
+}
 
-# Create the database if it doesn't exist:
-# if ! psql -l | egrep "^ *$DB_NAME *\|" > /dev/null
-# then
-#     createdb -T template_postgis --owner "$UNIX_USER" "$DB_NAME"
-#     cd $REPOSITORY/project
-#     ./manage.py syncdb --noinput
-#     ./manage.py migrate mapit
-# fi
+RANDOM_EMAIL_SECRET=$(random_alphanumerics 32)
+RANDOM_EMERGENY_PASSWORD=$(random_alphanumerics 10)
+RANDOM_COOKIE_SECRET=$(random_alphanumerics 100)
+
+# FIXME: this should try to preserve old values from the config, if
+# it exists, in case they've been customized.
+
+sed -r \
+    -e "s,^( *DOMAIN:).*,\\1 '$HOST'," \
+    -e "s,^( *FORCE_SSL:).*,\\1 true," \
+    -e "s,^( *TIME_ZONE:).*,\\1 'Europe/London'," \
+    -e "s,^( *BLOG_FEED:).*,\\1 null," \
+    -e "s,^( *TWITTER_USERNAME:).*,\\1 null," \
+    -e "s,^( *INCLUDE_DEFAULT_LOCALE_IN_URLS:).*,\\1 false," \
+    -e "s,^( *INCOMING_EMAIL_DOMAIN:).*,\\1 '$HOST'," \
+    -e "s,^( *INCOMING_EMAIL_PREFIX:).*,\\1 'foi-'," \
+    -e "s,^( *INCOMING_EMAIL_SECRET:).*,\\1 '$RANDOM_EMAIL_SECRET'," \
+    -e "s,^( *ADMIN_USERNAME:).*,\\1 'emergency'," \
+    -e "s,^( *ADMIN_PASSWORD:).*,\\1 '$RANDOM_EMERGENY_PASSWORD'," \
+    -e "s,^( *CONTACT_EMAIL:).*,\\1 'postmaster@$HOST'," \
+    -e "s,^( *TRACK_SENDER_EMAIL:).*,\\1 'postmaster@$HOST'," \
+    -e "s,^( *COOKIE_STORE_SESSION_SECRET:).*,\\1 '$RANDOM_COOKIE_SECRET'," \
+    -e "s,^( *FORWARD_NONBOUNCE_RESPONSES_TO:).*,\\1 'user-support@$HOST'," \
+    -e "s,^( *HTML_TO_PDF_COMMAND:).*,\\1 '/usr/bin/wkhtmltopdf-static'," \
+    -e "s,^( *EXCEPTION_NOTIFICATIONS_FROM:).*,\\1 'do-not-reply-to-this-address@$HOST'," \
+    -e "/EXCEPTION_NOTIFICATIONS_TO:/,/^$/c EXCEPTION_NOTIFICATIONS_TO:\n - team@$HOST\n" \
+    -e "s,^( *VARNISH_HOST:).*,\\1 null," \
+    -e "s,^( *MTA_LOG_PATH:).*,\\1 '/var/log/FIXME'," \
+    -e "s,^( *MTA_LOG_TYPE:).*,\\1 'postfix'," \
+    -e "s,^( *DONATION_URL:).*,\\1 null," \
+    config/general.yml-example > config/general.yml
+
+# add database.yml
+sed -r \
+    -e "s,^( *database: *)foi_(.*),\\1${REAL_DB_NAME}_\\2," \
+    -e "s,^( *username: *),\\1${UNIX_USER}," \
+    -e "s,^( *password: *),\\1null," \
+    config/database.yml-example > config/database.yml
+
+for SUFFIX in production test development
+do
+    REAL_DB_NAME="$DB_NAME_$SUFFIX"
+    # Create each database if it doesn't exist:
+    if ! psql -l | egrep "^ *$REAL_DB_NAME *\|" > /dev/null
+    then
+        createdb -T template0 --owner "$UNIX_USER" "$REAL_DB_NAME"
+    fi
+done
+
+script/rails-post-deploy

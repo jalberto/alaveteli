@@ -54,4 +54,6 @@ if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
     install_sysvinit_script
 fi
 
+# FIXME: start Thin
+
 notice_msg "FIXME: complete this script..."
