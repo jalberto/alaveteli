@@ -89,7 +89,7 @@ RANDOM_COOKIE_SECRET=$(random_alphanumerics 100)
 
 sed -r \
     -e "s,^( *DOMAIN:).*,\\1 '$HOST'," \
-    -e "s,^( *FORCE_SSL:).*,\\1 true," \
+    -e "s,^( *FORCE_SSL:).*,\\1 false," \
     -e "s,^( *TIME_ZONE:).*,\\1 'Europe/London'," \
     -e "s,^( *BLOG_FEED:).*,\\1 null," \
     -e "s,^( *TWITTER_USERNAME:).*,\\1 null," \
