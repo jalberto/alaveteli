@@ -129,4 +129,4 @@ do
     fi
 done
 
-script/rails-post-deploy
+bash -x script/rails-post-deploy
