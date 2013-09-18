@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 set -x
@@ -44,24 +44,36 @@ LINK_DESTINATION="$HOME/alaveteli"
 ln -sfn "$REPOSITORY" $LINK_DESTINATION
 cd "$REPOSITORY"
 
+BASHRC="$HOME/.bashrc"
+
 BASHRC_GEM_COMMENT="Set up local gem directory for Alaveteli"
+BASHRC_START="# START $BASHRC_GEM_COMMENT"
+BASHRC_END="# END $BASHRC_GEM_COMMENT"
 
-if ! grep -q "$BASHRC_GEM_COMMENT" $HOME/.bashrc; then
-    cat >>$HOME/.bashrc <<EOBRC
+# Remove the old lines we added:
+sed -ibackup "/$BASHRC_START/,/$BASHRC_END/d" "$BASHRC"
 
-# $BASHRC_GEM_COMMENT
+# Create a temporary file, so we can prepend the lines we need.  They
+# need to be prepended since the Ubuntu skeleton .bashrc begins with
+# '[ -z "$PS1" ] && return', skipping the rest of the .bashrc for
+# non-interactive use, but and we need the gem settings when invoking
+# commands in the shell non-interactively.
+TMP_BASHRC="$(mktemp "$BASHRC.XXXXXXX")"
+
+cat >>$TMP_BASHRC <<EOBRC
+$BASHRC_START
 export GEM_HOME="$HOME/gems"
+mkdir -p "\$GEM_HOME"
 export GEM_PATH=
 export PATH="\$GEM_HOME/bin:\$PATH"
+$BASHRC_END
 EOBRC
 fi
 
-# We also need to set these variable for this script (running under dash):
-export GEM_HOME="$HOME/gems"
-export GEM_PATH=
-export PATH="$GEM_HOME/bin:$PATH"
+cat "$BASHRC" >> "$TMP_BASHRC"
+mv "$TMP_BASHRC" "$BASHRC"
 
-mkdir -p "$GEM_HOME"
+source "$BASHRC"
 
 bundle install
 
