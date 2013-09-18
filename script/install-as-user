@@ -68,7 +68,6 @@ export GEM_PATH=
 export PATH="\$GEM_HOME/bin:\$PATH"
 $BASHRC_END
 EOBRC
-fi
 
 cat "$BASHRC" >> "$TMP_BASHRC"
 mv "$TMP_BASHRC" "$BASHRC"
