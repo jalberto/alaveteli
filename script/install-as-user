@@ -132,3 +132,5 @@ do
 done
 
 bash -x script/rails-post-deploy
+
+script/load-sample-data
