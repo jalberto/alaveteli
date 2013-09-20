@@ -121,7 +121,8 @@ sed -r \
 
 for SUFFIX in production test development
 do
-    REAL_DB_NAME="$DB_NAME_$SUFFIX"
+    REAL_DB_NAME="${DB_NAME}_$SUFFIX"
+    echo Creating the database $REAL_DB_NAME
     # Create each database if it doesn't exist:
     if ! psql -l | egrep "^ *$REAL_DB_NAME *\|" > /dev/null
     then
