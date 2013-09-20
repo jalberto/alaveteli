@@ -131,6 +131,6 @@ do
     fi
 done
 
-bash -x script/rails-post-deploy
+script/rails-post-deploy
 
 script/load-sample-data
