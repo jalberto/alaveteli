@@ -114,7 +114,7 @@ fi
 
 # add database.yml
 sed -r \
-    -e "s,^( *database: *)foi_(.*),\\1${REAL_DB_NAME}_\\2," \
+    -e "s,^( *database: *)foi_(.*),\\1${DB_NAME}_\\2," \
     -e "s,^( *username: *).*,\\1${UNIX_USER}," \
     -e "s,^( *password: *).*,\\1null," \
     config/database.yml-example > config/database.yml
