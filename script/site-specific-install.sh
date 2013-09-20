@@ -56,4 +56,5 @@ if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
     install_sysvinit_script
 fi
 
-notice_msg "FIXME: set up the MTA as well"
+notice_msg "FIXME: set up the MTA as well"; echo
+notice_msg "FIXME: set up Varnish as well"; echo
