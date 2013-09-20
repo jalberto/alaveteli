@@ -57,4 +57,5 @@ if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
 fi
 
 notice_msg "FIXME: set up the MTA as well"; echo
+notice_msg "FIXME: set up cron jobs"; echo
 notice_msg "FIXME: set up Varnish as well"; echo
