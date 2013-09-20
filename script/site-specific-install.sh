@@ -45,7 +45,9 @@ install_postfix
 
 install_website_packages
 
-add_postgresql_user
+# Make the PostgreSQL user a superuser to avoid the irritating error:
+#   PG::Error: ERROR:  permission denied: "RI_ConstraintTrigger_16564" is a system trigger
+add_postgresql_user --superuser
 
 export DEVELOPMENT_INSTALL
 su -c "$BIN_DIRECTORY/install-as-user '$UNIX_USER' '$HOST' '$DIRECTORY'" "$UNIX_USER"
