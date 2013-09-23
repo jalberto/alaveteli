@@ -17,5 +17,6 @@ server {
 
     location @ruby {
         proxy_pass http://alaveteli;
+        proxy_set_header Host $http_host;
     }
 }
