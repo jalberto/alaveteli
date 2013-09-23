@@ -63,6 +63,7 @@ sed -r \
     -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
     -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!/\!\!\(\*= .vcspath \*\)\!\!,$REPOSITORY," \
     -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!,$DIRECTORY," \
+    -e "s,run-with-lockfile,$REPOSITORY/commonlib/bin/run-with-lockfile.sh," \
     config/crontab-example > /etc/cron.d/alaveteli
 
 notice_msg "FIXME: set up the MTA as well"; echo
