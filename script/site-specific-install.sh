@@ -56,6 +56,15 @@ if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
     install_sysvinit_script
 fi
 
+# Set up root's crontab:
+
+sed -r \
+    -e "s,^(MAILTO=).*,\1cron-alaveteli@$HOST," \
+    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
+    -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!/\!\!\(\*= .vcspath \*\)\!\!,$REPOSITORY," \
+    -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!,$DIRECTORY," \
+    config/crontab-example > /etc/cron.d/alaveteli
+
 notice_msg "FIXME: set up the MTA as well"; echo
 notice_msg "FIXME: set up cron jobs"; echo
 notice_msg "FIXME: set up Varnish as well"; echo
