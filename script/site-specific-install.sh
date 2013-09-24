@@ -50,7 +50,7 @@ ensure_line_present() {
     FILE="$3"
     if [ -f "$FILE" ]
     then
-        if egrep "$MATCH_RE" "$FILE"
+        if egrep "$MATCH_RE" "$FILE" > /dev/null
         then
             sed -r -i -e "s,$MATCH_RE,$REQUIRED_LINE," "$FILE"
         else
