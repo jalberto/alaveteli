@@ -44,12 +44,10 @@ install_postfix
 # Now there's quite a bit of Postfix configuration that we need to
 # make sure is present:
 
-function ensure_line_present() {
-    echo "2 is $2"
+ensure_line_present() {
     MATCH_RE="$1"
     REQUIRED_LINE="$2"
     FILE="$3"
-    echo "REQUIRED_LINE is $REQUIRED_LINE"
     if [ -f "$FILE" ]
     then
         if egrep "$MATCH_RE" "$FILE"
