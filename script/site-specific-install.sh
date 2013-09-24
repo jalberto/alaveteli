@@ -110,7 +110,7 @@ EOF
 fi
 
 newaliases
-postmap /etc/postfix/virtual
+postmap /etc/postfix/regexp
 postfix reload
 
 # (end of the Postfix configuration)
