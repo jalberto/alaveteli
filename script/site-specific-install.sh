@@ -52,7 +52,7 @@ ensure_line_present() {
     then
         if egrep "$MATCH_RE" "$FILE"
         then
-            sed -r -e "s,$MATCH_RE,$REQUIRED_LINE," "$FILE"
+            sed -r -i -e "s,$MATCH_RE,$REQUIRED_LINE," "$FILE"
         else
             TMP_FILE=$(mktemp)
             echo "$REQUIRED_LINE" > $TMP_FILE
