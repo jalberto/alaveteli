@@ -32,8 +32,6 @@ misuse() {
 
 update_mysociety_apt_sources
 
-# XXX FIXME: decide on Exim vs Postfix
-
 if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
     install_nginx
     add_website_to_nginx
@@ -42,6 +40,77 @@ if [ ! "$DEVELOPMENT_INSTALL" = true ]; then
 fi
 
 install_postfix
+
+# Now there's quite a bit of Postfix configuration that we need to
+# make sure is present:
+
+function ensure_line_present() {
+    echo "2 is $2"
+    MATCH_RE="$1"
+    REQUIRED_LINE="$2"
+    FILE="$3"
+    echo "REQUIRED_LINE is $REQUIRED_LINE"
+    if [ -f "$FILE" ]
+    then
+        if egrep "$MATCH_RE" "$FILE"
+        then
+            sed -r -e "s,$MATCH_RE,$REQUIRED_LINE," "$FILE"
+        else
+            TMP_FILE=$(mktemp)
+            echo "$REQUIRED_LINE" > $TMP_FILE
+            cat "$FILE" >> $TMP_FILE
+            mv $TMP_FILE "$FILE"
+        fi
+    else
+        echo "$REQUIRED_LINE" >> "$FILE"
+    fi
+}
+
+ensure_line_present \
+    "^ *alaveteli *unix *.*" \
+    "alaveteli unix  -       n       n       -       50      pipe flags=R user=$UNIX_USER argv=$REPOSITORY/script/mailin" \
+    /etc/postfix/master.cf
+
+ensure_line_present \
+    "^ *virtual_alias_maps *= *regexp:/etc/postfix/regexp.*" \
+    "virtual_alias_maps = regexp:/etc/postfix/regexp" \
+    /etc/postfix/main.cf
+
+ensure_line_present \
+    "^.*alaveteli.*" \
+    "/^foi.*/	alaveteli" \
+    /etc/postfix/regexp
+
+ensure_line_present \
+    "^do-not-reply" \
+    "do-not-reply-to-this-address:        :blackhole:" \
+    /etc/aliases
+
+ensure_line_present \
+    "^mail.*" \
+    "mail.*                          -/var/log/mail/mail.log" \
+    /etc/rsyslog.d/50-default.conf
+
+if ! egrep '^ *mail.log *{' /etc/logrotate.d/rsyslog
+then
+    echo >> /etc/logrotate.d/rsyslog <<EOF
+/var/log/mail/mail.log {
+          rotate 30
+          daily
+          dateext
+          missingok
+          notifempty
+          compress
+          delaycompress
+          sharedscripts
+          postrotate
+                  reload rsyslog >/dev/null 2>&1 || true
+          endscript
+}
+EOF
+fi
+
+# (end of the Postfix configuration)
 
 install_website_packages
 
