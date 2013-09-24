@@ -91,7 +91,7 @@ ensure_line_present \
 
 if ! egrep '^ *mail.log *{' /etc/logrotate.d/rsyslog
 then
-    echo >> /etc/logrotate.d/rsyslog <<EOF
+    cat >> /etc/logrotate.d/rsyslog <<EOF
 /var/log/mail/mail.log {
           rotate 30
           daily
