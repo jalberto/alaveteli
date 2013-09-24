@@ -62,6 +62,7 @@ ensure_line_present() {
     else
         echo "$REQUIRED_LINE" >> "$FILE"
     fi
+    chmod 644 "$FILE"
 }
 
 ensure_line_present \
