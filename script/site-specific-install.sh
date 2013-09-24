@@ -66,6 +66,21 @@ sed -r \
     -e "s,run-with-lockfile,$REPOSITORY/commonlib/bin/run-with-lockfile.sh," \
     config/crontab-example > /etc/cron.d/alaveteli
 
-notice_msg "FIXME: set up the MTA as well"; echo
-notice_msg "FIXME: set up cron jobs"; echo
-notice_msg "FIXME: set up Varnish as well"; echo
+sed -r \
+    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
+    -e "s,\!\!\(\*= .daemon_name \*\)\!\!,foi-alert-tracks," \
+    -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY," \
+    config/alert-tracks-debian.ugly > /etc/init.d/foi-alert-tracks
+
+sed -r \
+    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
+    -e "s,\!\!\(\*= .daemon_name \*\)\!\!,foi-alert-tracks," \
+    -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY," \
+    config/purge-varnish-debian.ugly > /etc/init.d/foi-purge-varnish
+
+# Although we create the foi-purge-varnish script, this installation
+# doesn't install Varnish, so only make the foi-alert-tracks script
+# executable:
+chmod a+rx /etc/init.d/foi-alert-tracks
+
+done_msg "Installation complete"; echo
