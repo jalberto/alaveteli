@@ -109,6 +109,10 @@ then
 EOF
 fi
 
+newaliases
+postmap /etc/postfix/virtual
+postfix reload
+
 # (end of the Postfix configuration)
 
 install_website_packages
