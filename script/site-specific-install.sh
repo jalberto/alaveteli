@@ -150,9 +150,7 @@ sed -r \
     -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY,g" \
     config/purge-varnish-debian.ugly > /etc/init.d/foi-purge-varnish
 
-# Although we create the foi-purge-varnish script, this installation
-# doesn't install Varnish, so only make the foi-alert-tracks script
-# executable:
 chmod a+rx /etc/init.d/foi-alert-tracks
+chmod a+rx /etc/init.d/foi-purge-varnish
 
 done_msg "Installation complete"; echo
