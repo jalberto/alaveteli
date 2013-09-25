@@ -109,6 +109,8 @@ then
 EOF
 fi
 
+/etc/init.d/rsyslog restart
+
 newaliases
 postmap /etc/postfix/regexp
 postfix reload
