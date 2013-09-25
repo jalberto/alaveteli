@@ -90,7 +90,7 @@ ensure_line_present \
     "mail.*                          -/var/log/mail/mail.log" \
     /etc/rsyslog.d/50-default.conf
 
-if ! egrep '^ *mail.log *{' /etc/logrotate.d/rsyslog
+if ! egrep '^ */var/log/mail/mail.log *{' /etc/logrotate.d/rsyslog
 then
     cat >> /etc/logrotate.d/rsyslog <<EOF
 /var/log/mail/mail.log {
