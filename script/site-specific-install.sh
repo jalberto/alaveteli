@@ -132,22 +132,22 @@ fi
 
 sed -r \
     -e "s,^(MAILTO=).*,\1root@$HOST," \
-    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
-    -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!/\!\!\(\*= .vcspath \*\)\!\!,$REPOSITORY," \
-    -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!,$DIRECTORY," \
-    -e "s,run-with-lockfile,$REPOSITORY/commonlib/bin/run-with-lockfile.sh," \
+    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER,g" \
+    -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!/\!\!\(\*= .vcspath \*\)\!\!,$REPOSITORY,g" \
+    -e "s,/data/vhost/\!\!\(\*= .vhost \*\)\!\!,$DIRECTORY,g" \
+    -e "s,run-with-lockfile,$REPOSITORY/commonlib/bin/run-with-lockfile.sh,g" \
     config/crontab-example > /etc/cron.d/alaveteli
 
 sed -r \
-    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
-    -e "s,\!\!\(\*= .daemon_name \*\)\!\!,foi-alert-tracks," \
-    -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY," \
+    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER,g" \
+    -e "s,\!\!\(\*= .daemon_name \*\)\!\!,foi-alert-tracks,g" \
+    -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY,g" \
     config/alert-tracks-debian.ugly > /etc/init.d/foi-alert-tracks
 
 sed -r \
-    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER," \
-    -e "s,\!\!\(\*= .daemon_name \*\)\!\!,foi-alert-tracks," \
-    -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY," \
+    -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER,g" \
+    -e "s,\!\!\(\*= .daemon_name \*\)\!\!,foi-alert-tracks,g" \
+    -e "s,\!\!\(\*= .vhost_dir \*\)\!\!,$DIRECTORY,g" \
     config/purge-varnish-debian.ugly > /etc/init.d/foi-purge-varnish
 
 # Although we create the foi-purge-varnish script, this installation
