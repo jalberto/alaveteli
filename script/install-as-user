@@ -74,6 +74,9 @@ mv "$TMP_BASHRC" "$BASHRC"
 
 source "$BASHRC"
 
+# Speed up the installation of gems:
+echo 'gem: --no-ri --no-rdoc' > "$HOME/.gemrc"
+
 # Write sensible values into the config file:
 
 function random_alphanumerics() {
