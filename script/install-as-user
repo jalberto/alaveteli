@@ -145,7 +145,7 @@ echo Running rails-post-deploy
 script/rails-post-deploy
 
 echo Running load-sample-data
-script/load-sample-data
+bundle exec script/load-sample-data
 
 echo Running rebuild-xapian-index
 script/rebuild-xapian-index
