@@ -523,3 +523,30 @@ describe PublicBody, " when override all public body request emails set" do
         @geraldine.request_email.should == "catch_all_test_email@foo.com"
     end
 end
+
+describe PublicBody, " when asked for statistics on public bodies" do
+
+    it "should only return those with at least a minimum number of requests" do
+        minimum_requests = 1
+        with_enough_info_requests = PublicBody.where(["info_requests_count >= ?", minimum_requests])
+        all_data = PublicBody.get_request_totals 4, true, minimum_requests
+        all_data['public_bodies'].length.should == 4
+    end
+
+    it "should only return those with at least a minimum number of requests, but not tagged 'test'" do
+        hpb = PublicBody.find_by_name 'Department for Humpadinking'
+
+        original_tag_string = hpb.tag_string
+        hpb.add_tag_if_not_already_present 'test'
+
+        begin
+            minimum_requests = 1
+            with_enough_info_requests = PublicBody.where(["info_requests_count >= ?", minimum_requests])
+            all_data = PublicBody.get_request_totals 4, true, minimum_requests
+            all_data['public_bodies'].length.should == 3
+        ensure
+            hpb.tag_string = original_tag_string
+        end
+    end
+
+end
