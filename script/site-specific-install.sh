@@ -132,6 +132,8 @@ fi
 
 # Set up root's crontab:
 
+echo "The current directory is: $(pwd)"
+
 sed -r \
     -e "s,^(MAILTO=).*,\1root@$HOST," \
     -e "s,\!\!\(\*= .user \*\)\!\!,$UNIX_USER,g" \
