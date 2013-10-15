@@ -132,7 +132,7 @@ fi
 
 # Set up root's crontab:
 
-echo "The current directory is: $(pwd)"
+cd "$REPOSITORY"
 
 sed -r \
     -e "s,^(MAILTO=).*,\1root@$HOST," \
